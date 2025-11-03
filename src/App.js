@@ -5,6 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import UploadResume from './pages/UploadResume';
+import InternshipList from './pages/InternshipList';
 import PrivateRoute from './components/PrivateRoute';
 import authService from './services/authService';
 
@@ -27,21 +29,21 @@ function App() {
       <Router>
         <Routes>
           {/* Redirect root to dashboard if authenticated, otherwise to login */}
-          <Route 
-            path="/" 
+          <Route
+            path="/"
             element={
               authService.isAuthenticated() ? (
                 <Navigate to="/dashboard" replace />
               ) : (
                 <Navigate to="/login" replace />
               )
-            } 
+            }
           />
-          
+
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
+
           {/* Protected routes */}
           <Route
             path="/dashboard"
@@ -51,7 +53,23 @@ function App() {
               </PrivateRoute>
             }
           />
-          
+          <Route
+            path="/upload-resume"
+            element={
+              <PrivateRoute>
+                <UploadResume />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/internships"
+            element={
+              <PrivateRoute>
+                <InternshipList />
+              </PrivateRoute>
+            }
+          />
+
           {/* Catch all - redirect to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

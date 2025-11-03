@@ -1,6 +1,4 @@
----
-applyTo: '**'
----
+
 
 Day 3 — Frontend Setup + Auth Integration
 
