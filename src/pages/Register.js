@@ -14,6 +14,7 @@ import {
     Select,
     MenuItem,
 } from '@mui/material';
+import toast from 'react-hot-toast';
 import authService from '../services/authService';
 
 const Register = () => {
@@ -71,7 +72,9 @@ const Register = () => {
             const { confirmPassword, ...registrationData } = formData;
             const response = await authService.register(registrationData);
 
-            setSuccess(response.message || 'Registration successful! Redirecting to login...');
+            const successMessage = response.message || 'Registration successful! Redirecting to login...';
+            setSuccess(successMessage);
+            toast.success(successMessage);
 
             // Redirect to login after 2 seconds
             setTimeout(() => {
@@ -79,6 +82,7 @@ const Register = () => {
             }, 2000);
         } catch (err) {
             setError(err.message);
+            toast.error(err.message || 'Registration failed');
         } finally {
             setLoading(false);
         }

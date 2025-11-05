@@ -2,11 +2,18 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Toaster } from 'react-hot-toast';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import UploadResume from './pages/UploadResume';
 import InternshipList from './pages/InternshipList';
+import RecommendedInternships from './pages/RecommendedInternships';
+import CreateInternship from './pages/CreateInternship';
+import CompanyMatches from './pages/CompanyMatches';
+import ManageUsers from './pages/ManageUsers';
+import Analytics from './pages/Analytics';
+import IntelligentRanking from './pages/IntelligentRanking';
+import ResumeIntelligence from './pages/ResumeIntelligence';
 import PrivateRoute from './components/PrivateRoute';
 import authService from './services/authService';
 
@@ -26,6 +33,30 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#4caf50',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#f44336',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
       <Router>
         <Routes>
           {/* Redirect root to dashboard if authenticated, otherwise to login */}
@@ -54,14 +85,6 @@ function App() {
             }
           />
           <Route
-            path="/upload-resume"
-            element={
-              <PrivateRoute>
-                <UploadResume />
-              </PrivateRoute>
-            }
-          />
-          <Route
             path="/internships"
             element={
               <PrivateRoute>
@@ -69,6 +92,65 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/recommendations"
+            element={
+              <PrivateRoute>
+                <RecommendedInternships />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/internships/create"
+            element={
+              <PrivateRoute>
+                <CreateInternship />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/company/matches"
+            element={
+              <PrivateRoute>
+                <CompanyMatches />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <PrivateRoute>
+                <ManageUsers />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/analytics"
+            element={
+              <PrivateRoute>
+                <Analytics />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/intelligent-ranking"
+            element={
+              <PrivateRoute>
+                <IntelligentRanking />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/resume-intelligence"
+            element={
+              <PrivateRoute>
+                <ResumeIntelligence />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Redirect old upload-resume route to resume-intelligence */}
+          <Route path="/upload-resume" element={<Navigate to="/resume-intelligence" replace />} />
 
           {/* Catch all - redirect to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
