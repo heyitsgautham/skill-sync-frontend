@@ -7,7 +7,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #f5f7fa;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-attachment: fixed;
   min-height: 100vh;
 }
@@ -42,10 +42,10 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #999;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #777;
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
 }

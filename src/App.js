@@ -9,13 +9,11 @@ import Dashboard from './pages/Dashboard';
 import InternshipList from './pages/InternshipList';
 import RecommendedInternships from './pages/RecommendedInternships';
 import CreateInternship from './pages/CreateInternship';
+import CompanyMatches from './pages/CompanyMatches';
 import ManageUsers from './pages/ManageUsers';
 import Analytics from './pages/Analytics';
 import IntelligentRanking from './pages/IntelligentRanking';
 import ResumeIntelligence from './pages/ResumeIntelligence';
-import StudentProfile from './pages/student/StudentProfile';
-import CompanyProfile from './pages/company/CompanyProfile';
-import AdminProfile from './pages/admin/AdminProfile';
 import PrivateRoute from './components/PrivateRoute';
 import authService from './services/authService';
 
@@ -111,6 +109,14 @@ function App() {
             }
           />
           <Route
+            path="/company/matches"
+            element={
+              <PrivateRoute>
+                <CompanyMatches />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/admin/users"
             element={
               <PrivateRoute>
@@ -139,30 +145,6 @@ function App() {
             element={
               <PrivateRoute>
                 <ResumeIntelligence />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/student/profile"
-            element={
-              <PrivateRoute>
-                <StudentProfile />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/company/profile"
-            element={
-              <PrivateRoute>
-                <CompanyProfile />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/profile"
-            element={
-              <PrivateRoute>
-                <AdminProfile />
               </PrivateRoute>
             }
           />
