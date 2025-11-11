@@ -14,13 +14,9 @@
 
 ---
 
-<img src="./public/assets/Thumbnail1.png" alt="SkillSync Platform Preview" width="100%"/>
+<img src="./skill-sync-frontend/public/assets/Thumbnail1.png" alt="SkillSync Platform Preview" width="100%"/>
 
 ---
-
-**Built for**: 24-Hour HACK.IO National Level Hackathon 2025  
-**Domain**: HR Tech | Intelligent Resume Filtering  
-**Tech Stack**: FastAPI • Google Gemini 2.5 • ChromaDB • React • Material-UI • PostgreSQL
 
 </div>
 
@@ -122,10 +118,10 @@ HR teams face overwhelming challenges in modern hiring:
 </tr>
 <tr>
 <td>
-<img src="./public/assets/Gautham_Krishna_Resume_HackerRank.jpg" alt="Original Resume" width="400"/>
+<img src="./skill-sync-frontend/public/assets/Gautham_Krishna_Resume_HackerRank.jpg" alt="Original Resume" width="400"/>
 </td>
 <td>
-<img src="./public/assets/Masked Resume.jpg" alt="Anonymized Resume" width="400"/>
+<img src="./skill-sync-frontend/public/assets/Masked Resume.jpg" alt="Anonymized Resume" width="400"/>
 </td>
 </tr>
 <tr>

@@ -40,7 +40,7 @@ export const InternshipCardSkeleton = () => (
 export const InternshipListSkeleton = ({ count = 6 }) => (
     <Grid container spacing={3}>
         {[...Array(count)].map((_, index) => (
-            <Grid item xs={12} md={6} lg={4} key={index}>
+            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={index}>
                 <InternshipCardSkeleton />
             </Grid>
         ))}

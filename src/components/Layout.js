@@ -31,11 +31,17 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import authService from '../services/authService';
 
-const drawerWidth = 240;
+const EXPANDED_DRAWER_WIDTH = 240;
+const COLLAPSED_DRAWER_WIDTH = 72;
 
 const Layout = ({ children }) => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    // Persist collapsed state across navigation
+    const [collapsed, setCollapsed] = useState(() => {
+        const saved = localStorage.getItem('sidebarCollapsed');
+        return saved === 'true';
+    });
     const navigate = useNavigate();
     const location = useLocation();
     const theme = useTheme();
@@ -76,20 +82,21 @@ const Layout = ({ children }) => {
 
         const studentItems = [
             { text: 'AI Resume Intelligence', icon: <AIIcon />, path: '/resume-intelligence', roles: ['student'] },
-            { text: 'Browse Internships', icon: <WorkIcon />, path: '/internships', roles: ['student'] },
             { text: 'AI Recommendations', icon: <StarIcon />, path: '/recommendations', roles: ['student'] },
+            { text: 'My Profile', icon: <PersonIcon />, path: '/student/profile', roles: ['student'] },
         ];
 
         const companyItems = [
             { text: 'My Internships', icon: <WorkIcon />, path: '/internships', roles: ['company'] },
             { text: 'AI Candidate Ranking', icon: <AIIcon />, path: '/intelligent-ranking', roles: ['company'] },
-            { text: 'Matched Candidates', icon: <StarIcon />, path: '/company/matches', roles: ['company'] },
+            { text: 'My Profile', icon: <PersonIcon />, path: '/company/profile', roles: ['company'] },
         ];
 
         const adminItems = [
             { text: 'User Management', icon: <PersonIcon />, path: '/admin/users', roles: ['admin'] },
             { text: 'All Internships', icon: <WorkIcon />, path: '/internships', roles: ['admin'] },
             { text: 'Analytics', icon: <AIIcon />, path: '/admin/analytics', roles: ['admin'] },
+            { text: 'My Profile', icon: <PersonIcon />, path: '/admin/profile', roles: ['admin'] },
         ];
 
         const allItems = [...baseItems, ...studentItems, ...companyItems, ...adminItems];
@@ -100,6 +107,20 @@ const Layout = ({ children }) => {
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
+    };
+
+    const handleBrandClick = (event) => {
+        event.stopPropagation();
+        // On mobile, keep original behavior (navigate). On desktop, toggle collapsed state
+        if (isMobile) {
+            navigate('/dashboard');
+            return;
+        }
+        setCollapsed(prev => {
+            const newValue = !prev;
+            localStorage.setItem('sidebarCollapsed', newValue.toString());
+            return newValue;
+        });
     };
 
     const handleMenuOpen = (event) => {
@@ -120,14 +141,17 @@ const Layout = ({ children }) => {
         if (isMobile) {
             setMobileOpen(false);
         }
+        // Don't toggle collapse when navigating
     };
+
+    const currentDrawerWidth = collapsed ? COLLAPSED_DRAWER_WIDTH : EXPANDED_DRAWER_WIDTH;
 
     const drawer = (
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <Toolbar
-                onClick={() => navigate('/dashboard')}
+                onClick={handleBrandClick}
                 sx={{
-                    background: `linear-gradient(135deg, ${currentColors.primary} 0%, ${currentColors.primary}dd 100%)`,
+                    background: currentColors.primary,
                     color: 'white',
                     py: 2.5,
                     boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
@@ -139,8 +163,21 @@ const Layout = ({ children }) => {
                     },
                 }}
             >
-                <StarIcon sx={{ mr: 1.5, fontSize: 28 }} />
-                <Typography variant="h5" noWrap component="div" sx={{ fontWeight: 700, letterSpacing: '-0.5px' }}>
+                <StarIcon sx={{ mr: collapsed ? 0 : 1.5, fontSize: 28 }} />
+                <Typography
+                    variant="h5"
+                    noWrap
+                    component="div"
+                    sx={{
+                        fontWeight: 700,
+                        letterSpacing: '-0.5px',
+                        ml: collapsed ? 0 : 0.75,
+                        opacity: collapsed ? 0 : 1,
+                        width: collapsed ? 0 : 'auto',
+                        transition: 'all 0.25s ease',
+                        overflow: 'hidden',
+                    }}
+                >
                     SkillSync
                 </Typography>
             </Toolbar>
@@ -153,7 +190,9 @@ const Layout = ({ children }) => {
                             onClick={() => handleNavigation(item.path)}
                             sx={{
                                 borderRadius: 2,
-                                py: 1.5,
+                                py: 1.25,
+                                pr: collapsed ? 1 : 2,
+                                pl: collapsed ? 1 : 1.5,
                                 transition: 'all 0.3s ease',
                                 '&.Mui-selected': {
                                     background: `linear-gradient(135deg, ${currentColors.primary}15 0%, ${currentColors.primary}25 100%)`,
@@ -170,8 +209,10 @@ const Layout = ({ children }) => {
                         >
                             <ListItemIcon sx={{
                                 color: location.pathname === item.path ? currentColors.primary : '#666',
-                                minWidth: 45,
+                                minWidth: collapsed ? 0 : 45,
+                                justifyContent: 'center',
                                 transition: 'all 0.3s ease',
+                                mr: collapsed ? 0 : 1,
                             }}>
                                 {item.icon}
                             </ListItemIcon>
@@ -180,6 +221,12 @@ const Layout = ({ children }) => {
                                 primaryTypographyProps={{
                                     fontWeight: location.pathname === item.path ? 600 : 500,
                                     fontSize: '0.95rem',
+                                }}
+                                sx={{
+                                    opacity: collapsed ? 0 : 1,
+                                    width: collapsed ? 0 : 'auto',
+                                    transition: 'all 0.25s ease',
+                                    overflow: 'hidden',
                                 }}
                             />
                         </ListItemButton>
@@ -196,12 +243,13 @@ const Layout = ({ children }) => {
                 position="fixed"
                 elevation={0}
                 sx={{
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    ml: { sm: `${drawerWidth}px` },
+                    width: { sm: `calc(100% - ${currentDrawerWidth}px)` },
+                    ml: { sm: `${currentDrawerWidth}px` },
                     background: 'rgba(255, 255, 255, 0.95)',
                     backdropFilter: 'blur(20px)',
                     borderBottom: '1px solid rgba(0,0,0,0.08)',
                     boxShadow: '0 4px 30px rgba(0,0,0,0.05)',
+                    transition: 'all 0.3s ease',
                 }}
             >
                 <Toolbar sx={{ py: 1 }}>
@@ -285,7 +333,7 @@ const Layout = ({ children }) => {
                                     boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                                 }}
                             >
-                                {currentUser?.email?.[0]?.toUpperCase() || 'U'}
+                                {currentUser?.full_name?.[0]?.toUpperCase() || currentUser?.email?.[0]?.toUpperCase() || 'U'}
                             </Avatar>
                         </IconButton>
                     </Box>
@@ -365,7 +413,7 @@ const Layout = ({ children }) => {
             {/* Sidebar Drawer */}
             <Box
                 component="nav"
-                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                sx={{ width: { sm: currentDrawerWidth }, flexShrink: { sm: 0 } }}
             >
                 {/* Mobile drawer */}
                 <Drawer
@@ -377,7 +425,7 @@ const Layout = ({ children }) => {
                     }}
                     sx={{
                         display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: EXPANDED_DRAWER_WIDTH },
                     }}
                 >
                     {drawer}
@@ -387,7 +435,12 @@ const Layout = ({ children }) => {
                     variant="permanent"
                     sx={{
                         display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                        '& .MuiDrawer-paper': {
+                            boxSizing: 'border-box',
+                            width: currentDrawerWidth,
+                            transition: 'width 0.3s ease',
+                            overflowX: 'hidden',
+                        },
                     }}
                     open
                 >
@@ -401,7 +454,7 @@ const Layout = ({ children }) => {
                 sx={{
                     flexGrow: 1,
                     p: { xs: 2, sm: 3, md: 4 },
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    width: { sm: `calc(100% - ${currentDrawerWidth}px)` },
                     minHeight: '100vh',
                     background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
                     position: 'relative',
