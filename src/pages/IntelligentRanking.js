@@ -46,6 +46,8 @@ import ActiveFilters from '../components/ActiveFilters';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
+
 const IntelligentRanking = () => {
     const [internships, setInternships] = useState([]);
     const [selectedInternship, setSelectedInternship] = useState('');
@@ -115,7 +117,7 @@ const IntelligentRanking = () => {
     const fetchInternships = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:8000/api/internship/my-posts', {
+            const response = await axios.get(`${API_BASE_URL}/internship/my-posts`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -136,7 +138,7 @@ const IntelligentRanking = () => {
     const fetchInternshipSkills = async (internshipId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:8000/api/internship/${internshipId}`, {
+            const response = await axios.get(`${API_BASE_URL}/internship/${internshipId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -192,10 +194,10 @@ const IntelligentRanking = () => {
                 }
             });
 
-            console.log(`🌐 Full API URL: http://localhost:8000/api/filter/rank-candidates/${selectedInternship}?${params.toString()}`);
+            console.log(`🌐 Full API URL: ${API_BASE_URL}/filter/rank-candidates/${selectedInternship}?${params.toString()}`);
 
             const response = await axios.post(
-                `http://localhost:8000/api/filter/rank-candidates/${selectedInternship}?${params.toString()}`,
+                `${API_BASE_URL}/filter/rank-candidates/${selectedInternship}?${params.toString()}`,
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -279,7 +281,7 @@ const IntelligentRanking = () => {
 
             // First, get resume metadata
             const metadataResponse = await axios.get(
-                `http://localhost:8000/api/recommendations/resume/${studentId}`,
+                `${API_BASE_URL}/recommendations/resume/${studentId}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                     params: { internship_id: selectedInternship }
@@ -354,7 +356,7 @@ const IntelligentRanking = () => {
             const exportType = 'filtered'; // Export all filtered results
 
             const response = await axios.get(
-                `http://localhost:8000/api/filter/export-candidates/${selectedInternship}`,
+                `${API_BASE_URL}/filter/export-candidates/${selectedInternship}`,
                 {
                     params: {
                         format: format,

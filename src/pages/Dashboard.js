@@ -39,6 +39,8 @@ import { motion } from 'framer-motion';
 import authService from '../services/authService';
 import Layout from '../components/Layout';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
+
 const Dashboard = () => {
     const navigate = useNavigate();
     const user = authService.getCurrentUser();
@@ -62,7 +64,7 @@ const Dashboard = () => {
         setRecomputeResult(null);
 
         try {
-            const response = await fetch('http://localhost:8000/api/admin/recompute-embeddings', {
+            const response = await fetch(`${API_BASE_URL}/admin/recompute-embeddings`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${authService.getToken()}`,
@@ -99,7 +101,7 @@ const Dashboard = () => {
         setIsClearingChroma(true);
 
         try {
-            const response = await fetch('http://localhost:8000/api/admin/clear-chromadb', {
+            const response = await fetch(`${API_BASE_URL}/admin/clear-chromadb`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${authService.getToken()}`,
@@ -138,7 +140,7 @@ const Dashboard = () => {
         setIsReindexing(true);
 
         try {
-            const response = await fetch('http://localhost:8000/api/admin/reindex-all-students', {
+            const response = await fetch(`${API_BASE_URL}/admin/reindex-all-students`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${authService.getToken()}`,
@@ -181,7 +183,7 @@ const Dashboard = () => {
     // Fetch system status
     const fetchSystemStatus = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/admin/system-status', {
+            const response = await fetch(`${API_BASE_URL}/admin/system-status`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authService.getToken()}`,

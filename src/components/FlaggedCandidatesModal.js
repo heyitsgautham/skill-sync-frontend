@@ -28,6 +28,8 @@ import EmailIcon from '@mui/icons-material/Email';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
+
 const FlaggedCandidatesModal = ({ open, onClose, candidateId, flaggedWith, flagReasons }) => {
     const [loading, setLoading] = useState(false);
     const [candidatesData, setcandidatesData] = useState([]);

@@ -40,6 +40,8 @@ import CollapsibleSection from '../components/CollapsibleSection';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
+
 const ResumeIntelligence = () => {
     const [file, setFile] = useState(null);
     const [parsedData, setParsedData] = useState(null);
@@ -70,7 +72,7 @@ const ResumeIntelligence = () => {
         setLoadingResumes(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:8000/api/resume/my-resumes', {
+            const response = await axios.get(`${API_BASE_URL}/resume/my-resumes`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setMyResumes(response.data);
@@ -102,7 +104,7 @@ const ResumeIntelligence = () => {
             // Then, activate the resume in the database
             try {
                 await axios.put(
-                    `http://localhost:8000/api/resume/${resumeId}/activate`,
+                    `${API_BASE_URL}/resume/${resumeId}/activate`,
                     {},
                     {
                         headers: { Authorization: `Bearer ${token}` }
@@ -118,7 +120,7 @@ const ResumeIntelligence = () => {
 
             // Then, get parsed data
             const response = await axios.get(
-                `http://localhost:8000/api/resume/${resumeId}/parsed-data`,
+                `${API_BASE_URL}/resume/${resumeId}/parsed-data`,
                 {
                     headers: { Authorization: `Bearer ${token}` }
                 }
@@ -131,7 +133,7 @@ const ResumeIntelligence = () => {
             if (structuredData && structuredData.all_skills) {
                 try {
                     await axios.put(
-                        'http://localhost:8000/api/students/profile',
+                        `${API_BASE_URL}/students/profile`,
                         {
                             skills: structuredData.all_skills,
                             total_experience_years: structuredData.total_experience_years || 0,
@@ -242,7 +244,7 @@ const ResumeIntelligence = () => {
 
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:8000/api/resume/${resumeId}`, {
+            await axios.delete(`${API_BASE_URL}/resume/${resumeId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -296,7 +298,7 @@ const ResumeIntelligence = () => {
 
             const token = localStorage.getItem('token');
             const response = await axios.post(
-                'http://localhost:8000/api/filter/parse-resume',
+                `${API_BASE_URL}/filter/parse-resume`,
                 formData,
                 {
                     headers: {
@@ -319,7 +321,7 @@ const ResumeIntelligence = () => {
             if (structuredData && structuredData.all_skills) {
                 try {
                     await axios.put(
-                        'http://localhost:8000/api/students/profile',
+                        `${API_BASE_URL}/students/profile`,
                         {
                             skills: structuredData.all_skills,
                             total_experience_years: structuredData.total_experience_years || 0,

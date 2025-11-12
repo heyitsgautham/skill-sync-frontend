@@ -25,7 +25,7 @@ const CreateInternshipForm = () => {
   const [success, setSuccess] = useState('');
 
   // Get API base URL from environment or use default
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
 
   // Get auth token from localStorage
   const getAuthToken = () => localStorage.getItem('token');
